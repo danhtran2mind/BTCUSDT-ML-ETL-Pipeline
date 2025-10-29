@@ -9,7 +9,7 @@ python components/duckdb2csv.py
 ```
 ## Reporting
 ### Local File Report
-You can view the processed file here: [BTCUSDT Report](../analytics/BTCUSDT_report.pdf).
+You can view the processed file here: [BTCUSDT Report](../analytics/BTCUSDT_analytics_report.pdf).
 
 ### LockerStudio
 
