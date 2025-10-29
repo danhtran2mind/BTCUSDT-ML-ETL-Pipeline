@@ -38,16 +38,22 @@ This is the scalable pipeline fetches Binance crypto data, stores in MinIO, proc
 
 ```mermaid
 graph LR
-    A[Binance<br>API] --> B(Crawl<br>Data)
-    B --> C[Local<br>CSV Files]
+    A[Binance<br>Public API] --> B[Data Crawler]
+    B --> C[Raw CSV<br>Local Storage]
     C --> D[MinIO<br>Object Storage]
-    D --> E[Extract<br>Parquet]
-    E --> F[Transform & Clean]
-    F --> G[DuckDB<br>Analytical DB]
-    E --> H[Train<br>LSTM Model]
-    H --> I[Evaluate & Predict]
-    G --> J[Export to<br>CSV]
+    D --> E[Convert to<br>Parquet Format]
+    E --> F[Transform<br>& Clean Data]
+    F --> G[DuckDB<br>Analytical Database]
+    E --> H[Train LSTM<br>Model]
+    H --> I[Model Evaluation<br>& Prediction]
+    G --> J[Export Results<br>to CSV]
+
+    style A fill:#4CAF50,stroke:#388E3C,color:white
+    style D fill:#2196F3,stroke:#1976D2,color:white
+    style G fill:#FF9800,stroke:#F57C00,color:white
+    style H fill:#9C27B0,stroke:#7B1FA2,color:white
 ```
+
 ## 3. Pipeline Components
 
 ### 3.1. Data Ingestion (`crawl_data_from_sources`)
