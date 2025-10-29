@@ -208,8 +208,8 @@ marimo/_lsp/
 __marimo__/
 
 
-# Ignore everything in logs/
-*
+# Ignore all .log files by default
+*.log
 
-# But keep the specific MinIO log
-!minio_server.log
+# But do NOT ignore this specific one (exception must come AFTER the ignore)
+!logs/minio_server.log
