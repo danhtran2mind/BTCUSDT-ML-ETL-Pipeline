@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# But keep the airflow directory itself (so it's not deleted when cloning)
+!/.gitignore
+!/airflow/
+!/airflow/.gitignore
+!/airflow/dags/
+
+# Recursively keep everything inside dags
+!/airflow/dags/**

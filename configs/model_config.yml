@@ -1,0 +1,41 @@
+# =============================================================================
+# Unified Model & Output Configuration
+# =============================================================================
+
+model:
+  architecture: bilstm        # lstm | bilstm | gru | custom
+  units: 100 #100
+  layers: 3 #2
+  dropout: 0.2
+  activation: tanh
+  optimizer: adam
+  learning_rate: 0.0005
+  loss: mse
+
+training:
+  epochs: 20
+  batch_size: 6144
+  patience: 5
+
+evaluation:
+  eval_batch_size: 6144
+
+data:
+  seq_length: 60
+  train_ratio: 0.8
+  val_ratio: 0.1
+
+output:
+  checkpoints:
+    model_dir: ckpts
+    scaler_dir: ckpts
+
+  metrics:
+    metrics_dir: evaluation
+
+  predictions:
+    pred_dir: evaluation
+
+versioning:
+  datetime_format: '%Y-%m-%d-%H-%M-%S'
+  timezone: '+07:00'

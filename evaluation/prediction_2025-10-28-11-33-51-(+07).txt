@@ -1,0 +1,11 @@
+Model Run: 2025-10-28-11-33-51-(+07)
+Model File: model_2025-10-28-11-33-51-(+07).h5
+Dataset Merged: BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09
+Architecture: BILSTM
+Predicted Next Close: 116419.757812
+Based on last 60 timesteps.
+
+Evaluation Metrics:
+  Train  -> RMSE: 3851.842286 | MAE: 3110.435303 | MAPE: 0.027629
+  Val    -> RMSE: 2661.869268 | MAE: 2185.974854 | MAPE: 0.019314
+  Test   -> RMSE: 5700.902911 | MAE: 5390.451660 | MAPE: 0.048840
