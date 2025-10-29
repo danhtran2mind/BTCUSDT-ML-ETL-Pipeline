@@ -1,4 +1,4 @@
-# BTCUSDT-ML-ETL-Pipeline
+# BTCUSDT ML ETL Pipeline
 
 [![GitHub Stars](https://img.shields.io/github/stars/danhtran2mind/BTCUSDT-ML-ETL-Pipeline?style=social&label=Repo%20Stars)](https://github.com/danhtran2mind/BTCUSDT-ML-ETL-Pipeline/stargazers)
 ![Badge](https://hitscounter.dev/api/hit?url=https%3A%2F%2Fgithub.com%2Fdanhtran2mind%2FBTCUSDT-ML-ETL-Pipeline&label=Repo+Views&icon=github&color=%236f42c1&message=&style=social&tz=UTC)
