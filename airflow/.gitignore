@@ -1,11 +1,44 @@
-# Ignore everything
-*
+# Airflow core ignores (default + safe for production)
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+htmlcov/
 
-# But keep the airflow directory itself (so it's not deleted when cloning)
-!/.gitignore
-!/airflow/
-!/airflow/.gitignore
-!/airflow/dags/
+# Airflow specific
+airflow.db
+webserver_config.py
+airflow.cfg
+logs/
+dags/.airflowignore
+dags/__pycache__/
+dags/*.pyc
 
-# Recursively keep everything inside dags
-!/airflow/dags/**
+# Others
+*.pid
+
+# Allow these to be tracked
+!dags/
+!.gitignore
+
