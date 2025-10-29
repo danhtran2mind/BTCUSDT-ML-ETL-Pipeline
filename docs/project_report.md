@@ -20,11 +20,10 @@
   - [XCom Passing Strategy](#xcom-passing-strategy)
   - [Configuration Management](#configuration-management)
   - [Error Handling & Retries](#error-handling--retries)
-- [6. Results & Model Performance](#6-results--model-performance)
-- [7. Project Structure](#7-project-structure)
-- [8. Technologies Used](#8-technologies-used)
-- [9. Future Improvements](#9-future-improvements)
-- [10. Conclusion](#10-conclusion)
+- [6. Project Structure](#7-project-structure)
+- [7. Technologies Used](#8-technologies-used)
+- [8. Future Improvements](#9-future-improvements)
+- [9. Conclusion](#10-conclusion)
 
 ---
 
@@ -35,6 +34,7 @@ This project implements a **fully automated, end-to-end data pipeline** for acqu
 The system is designed with **modularity**, **scalability**, and **reproducibility** in mind, suitable for production-grade financial analytics workflows.
 
 ## 2. System Architecture
+This is the scalable pipeline fetches Binance crypto data, stores in MinIO, processes with DuckDB and LSTM for analysis and prediction.
 
 ```mermaid
 graph LR
@@ -48,10 +48,6 @@ graph LR
     H --> I[Evaluate & Predict]
     G --> J[Export to<br>CSV]
 ```
-
-**Figure 1: High-Level Data Flow Architecture**  
-![Architecture Diagram](../assets/project_report/architecture_diagram.png)
-
 ## 3. Pipeline Components
 
 ### 3.1. Data Ingestion (`crawl_data_from_sources`)
@@ -60,15 +56,20 @@ graph LR
 - Saves raw `.csv` files locally under `data/raw/binance/`
 
 > **Figure 2: Sample Raw Binance Klines (1h interval)**  
-> ![Raw Binance Data Sample](../assets/project_report/binance_raw_sample.png)
+The Features and Example Data of `BTCUSDT-1s-2025-08` like:
+
+| Open time                  | Open       | High       | Low        | Close      | Volume   | Close time             | Quote asset volume | Number of trades | Taker buy base asset volume | Taker buy quote asset volume | Ignore |
+|----------------------------|------------|------------|------------|------------|----------|------------------------|--------------------|------------------|-----------------------------|-------------------------------|--------|
+| 1754006401000000           | 115758.12  | 115758.12  | 115742.54  | 115742.54  | 0.74915  | 1754006401999999       | 86719.128048       | 124              | 0.16180                     | 18729.640409                  | 0      |
+| 1754006402000000           | 115742.53  | 115742.53  | 115720.00  | 115720.00  | 0.18958  | 1754006402999999       | 21940.492584       | 156              | 0.00184                     | 212.929830                    | 0      |
+| 1754006403000000           | 115720.00  | 115724.23  | 115720.00  | 115724.23  | 0.34030  | 1754006403999999       | 39379.862285       | 50               | 0.32508                     | 37618.539657                  | 0      |
+| 1754006404000000           | 115724.23  | 115730.53  | 115724.22  | 115730.53  | 0.10858  | 1754006404999999       | 12565.453009       | 41               | 0.10841                     | 12545.779891                  | 0      |
+| 1754006405000000           | 115730.53  | 115730.53  | 115730.52  | 115730.53  | 0.01078  | 1754006405999999       | 1247.575098        | 9                | 0.00923                     | 1068.192792                   | 0      |
 
 ### 3.2. Object Storage Layer (`up_to_minio`)
 - Uploads raw CSVs to **MinIO** bucket: `btcusdt-raw-data`
 - Generates deterministic server-side filenames using checksums and timestamps
 - Enables versioning and auditability
-
-> **Figure 3: MinIO Bucket Structure**  
-> ![MinIO Bucket View](../assets/project_report/minio_bucket_view.png)
 
 ### 3.3. ETL Layer (`extract_from_minio` → `transform_financial_data`)
 - Reads Parquet-converted files from MinIO
@@ -79,9 +80,6 @@ graph LR
   - Missing value imputation
   - Feature engineering (returns, volatility, RSI, MACD)
 - Outputs cleaned Parquet in `data/processed/`
-
-> **Figure 4: Feature Engineering Output (RSI & MACD)**  
-> ![Technical Indicators](../assets/project_report/technical_indicators_plot.png)
 
 ### 3.4. Data Warehouse (`push_to_duckdb`)
 - Loads transformed Parquet into **DuckDB** mother table: `btcusdt_ohlcv_enriched`
@@ -97,33 +95,44 @@ CREATE TABLE btcusdt_ohlcv_enriched (
 );
 ```
 
-> **Figure 5: DuckDB Schema & Sample Query Result**  
-> ![DuckDB Table Preview](../assets/project_report/duckdb_table_preview.png)
 
-### 3.5. Model Training (`train_lstm_model`)
+## Table: `aggregated_financial_data`
+
+### Columns
+This is DuckDB Table Preview:
+
+| Column | Type | Nullable | Default |
+|--------|------|----------|---------|
+| `Open time` | `BIGINT` | YES | — |
+| `Open` | `DOUBLE` | YES | — |
+| `High` | `DOUBLE` | YES | — |
+| `Low` | `DOUBLE` | YES | — |
+| `Close` | `DOUBLE` | YES | — |
+| `Number of trades` | `BIGINT` | YES | — |
+
+
+### 3.5. Model Training and Evaluation (`train_lstm_model` and `metric_and_predict_lstm`)
+Model Training Configuration Overview (`configs/model_config.yml`). The training pipeline is powered by a Keras LSTM architecture designed for time-series forecasting of BTC/USDT price movements:
 - Uses **Keras LSTM** with sequence length = 60 timesteps
 - Input features: normalized `[close, volume, rsi, macd, volatility]`
 - Target: next timestep `close` price (regression)
 - Early stopping + model checkpointing
-- Saves model to `models/lstm_btcusdt.keras`
+- Saves model to `ckpts/lstm_btcusdt.h5`
 
-> **Figure 6: Training Loss Curve**  
-> ![Training Loss](../assets/project_report/lstm_training_loss.png)
+This is the example of Evaluation:
 
-### 3.6. Evaluation & Inference (`metric_and_predict_lstm_model`)
-- Computes: **MAE**, **RMSE**, **MAPE**, **Directional Accuracy**
-- Generates **30-day forecast horizon**
-- Plots actual vs predicted
-
-> **Figure 7: LSTM Forecast vs Actual (Last 90 Days + 30-Day Forecast)**  
-> ![LSTM Prediction Plot](../assets/project_report/lstm_forecast_vs_actual.png)
-
-### 3.7. Export Module (`duckdb_to_csv`)
-- Exports analytical views from DuckDB to `reports/forecast_output.csv`
-- Used for BI tools, dashboards, or stakeholder delivery
-
-> **Figure 8: Exported Forecast CSV Preview**  
-> ![CSV Export Sample](../assets/project_report/csv_export_preview.png)
+m
+| model_path                          | dataset_merge                          | Split | Metric | Value                |
+|-------------------------------------|----------------------------------------|-------|--------|----------------------|
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Train | RMSE   | 3851.842286490972   |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Train | MAE    | 3110.435302734375   |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Train | MAPE   | 0.027629373595118523 |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Val   | RMSE   | 2661.8692680144904  |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Val   | MAE    | 2185.974853515625   |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Val   | MAPE   | 0.01931408792734146 |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Test  | RMSE   | 5700.902910943143   |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Test  | MAE    | 5390.45166015625    |
+| model_2025-10-28-11-33-51-(+07).h5 | BTCUSDT-1s-2025-08 + BTCUSDT-1s-2025-09 | Test  | MAPE   | 0.04883997514843941 |
 
 ---
 
@@ -138,19 +147,44 @@ Four **independent but sequential DAGs** ensure loose coupling and fault isolati
 | `lstm_forecast` | `@monthly` | Train and predict |
 | `duckdb_to_csv_export` | `@monthly` | Export results |
 
-> **Figure 9: Airflow DAG Dependency Graph**  
-> ![Airflow DAG Graph](../assets/project_report/airflow_dag_graph.png)
+
+These are detail DAGs:
+<table>
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">
+        <img src="../assets/project_report/architecture_diagram_1.png" alt="Architecture Diagram 1" height="250">
+        <br><strong>a. <code>crawl_to_minio</code> DAG</strong>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">
+        <img src="../assets/project_report/architecture_diagram_2.png" alt="Architecture Diagram 2" height="250">
+        <br><strong>b. <code>etl_to_duckdb</code> DAG</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">
+        <img src="../assets/project_report/architecture_diagram_3.png" alt="Architecture Diagram 3" height="250">
+        <br><strong>c. <code>lstm_forecast</code> DAG</strong>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">
+        <img src="../assets/project_report/architecture_diagram_4.png" alt="Architecture Diagram 4" height="250">
+        <br><strong>d. <code>duckdb_to_csv_export</code> DAG</strong>
+      </td>
+    </tr>
+    </tbody>
+</table>
+<div style="text-align: center;">
+    <em>Figure 1: High-Level Data Flow Architecture</em>
+</div>
 
 ```mermaid
 graph LR
     dag1[crawl_to_minio] --> dag2[etl_to_duckdb]
-    dag2 --> dag3[lstm_forecast]
+    dag1 --> dag3[lstm_forecast]
     dag2 --> dag4[duckdb_to_csv_export]
 ```
 
 > *Note: DAGs are decoupled via persistent storage (MinIO/DuckDB) to avoid tight XCom coupling.*
-
----
 
 ## 5. Key Implementation Details
 
@@ -175,26 +209,9 @@ default_args = {
 }
 ```
 
----
 
-## 6. Results & Model Performance
-
-| Metric | Value |
-|-------|-------|
-| **MAE** | 412.31 USD |
-| **RMSE** | 598.77 USD |
-| **MAPE** | 1.84% |
-| **Directional Accuracy** | 68.3% |
-
-> *Evaluation on held-out test set (20% of data)*
-
-> **Figure 10: Model Performance Metrics Dashboard**  
-> ![Model Metrics](../assets/project_report/model_metrics_dashboard.png)
-
----
-
-## 7. Project Structure
-
+## 6. Project Structure
+This is the simple Project Structure graph
 ```
 project/
 ├── airflow/
@@ -218,29 +235,23 @@ project/
     └── project_report.md
 ```
 
-> **Figure 11: Project Directory Tree**  
-> ![Project Structure](../assets/project_report/project_structure.png)
-
----
-
-## 8. Technologies Used
+## 7. Technologies Used
 
 | Layer | Technology |
 |------|------------|
 | Orchestration | **Apache Airflow** |
 | Storage | **MinIO** (S3-compatible) |
-| Processing | **Pandas**, **Polars**, **PyArrow** |
+| Processing | **Pandas**, **PySpark** |
 | Database | **DuckDB** (embedded analytical) |
-| ML | **TensorFlow/Keras**, **scikit-learn** |
-| Visualization | **Matplotlib**, **Seaborn** |
+| ML | **LSTM / BiLSTM / GRU /custom** architectures|
+| Visualization | **LockerStudio** |
 
----
 
-## 9. Future Improvements
+## 8. Future Improvements
 
 | Feature | Description |
 |-------|-----------|
-| Incremental Updates | Use `@daily` partial refreshes |
+| Incremental Updates | Use `@monthly` partial refreshes |
 | Backtesting Module | Strategy simulation on predictions |
 | Alerting | Slack/Email on anomaly detection |
 | Model Registry | MLflow integration |
@@ -248,7 +259,7 @@ project/
 
 ---
 
-## 10. Conclusion
+## 9. Conclusion
 
 This project demonstrates a **production-ready MLOps pipeline** for cryptocurrency price forecasting with:
 

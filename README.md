@@ -157,6 +157,8 @@ Use the Airflow UI to trigger and monitor **BTC-USDT ETL** workflows.
 ### 6. Export Data to CSV for Visualization
 
 You can read more at [Export DuckDB to CSV](docs/visualize_data.md)
+## Project Report
+You can see **BTCUSDT-ML-ETL-Pipeline Report** at [Project Report](docs/project_report.md).
 
 ## Troubleshooting
 
