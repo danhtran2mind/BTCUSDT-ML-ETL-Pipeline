@@ -1,5 +1,5 @@
 
-# BTC/USDT Financial Data Pipeline & LSTM Forecasting System  
+# BTC-USDT Financial Data Pipeline & LSTM Forecasting System  
 **Project Report**  
 *Data Engineering | ETL | Time-Series Forecasting | Airflow Orchestration*  
 
