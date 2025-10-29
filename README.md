@@ -1,4 +1,4 @@
-# BTCUSDT-Forecast-ML-ETL-Pipeline
+# BTCUSDT-ML-ETL-Pipeline
 
 A modern, scalable data engineering pipeline for processing BTC-USDT trading data using Apache Airflow, MinIO, and Apache Spark.
 
@@ -26,13 +26,13 @@ This project delivers a robust, cloud-native ETL pipeline for extracting, transf
 
 ## Quickstart Guide
 
-Follow these steps to set up and run the BTCUSDT-Forecast-ML-ETL-Pipeline.
+Follow these steps to set up and run the `BTCUSDT-ML-ETL-Pipeline`.
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/danhtran2mind/BTCUSDT-Forecast-ML-ETL-Pipeline.git
-cd BTCUSDT-Forecast-ML-ETL-Pipeline
+git clone https://github.com/danhtran2mind/BTCUSDT-ML-ETL-Pipeline.git
+cd BTCUSDT-ML-ETL-Pipeline
 ```
 
 ### 2. Install Dependencies
@@ -140,7 +140,7 @@ MIT
 - Improved formatting consistency and removed redundant words.
 - Maintained all code blocks and technical details unchanged.Here's the revised README.md with updated text for improved clarity, conciseness, and professionalism while preserving the original structure and code blocks:
 
-# BTCUSDT-Forecast-ML-ETL-Pipeline
+# BTCUSDT-ML-ETL-Pipeline
 
 A modern, scalable data engineering pipeline for processing BTC-USDT trading data using Apache Airflow, MinIO, and Apache Spark.
 
@@ -173,8 +173,8 @@ Follow these steps to set up and run the **BTC-USDT ETL pipeline**.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/danhtran2mind/BTCUSDT-Forecast-ML-ETL-Pipeline.git
-cd BTCUSDT-Forecast-ML-ETL-Pipeline
+git clone https://github.com/danhtran2mind/BTCUSDT-ML-ETL-Pipeline.git
+cd BTCUSDT-ML-ETL-Pipeline
 ```
 
 ### 2. Install Dependencies

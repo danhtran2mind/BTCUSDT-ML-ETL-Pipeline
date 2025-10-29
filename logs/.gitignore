@@ -1,0 +1,5 @@
+# Allow the MinIO server log to be tracked
+!minio_server.log
+
+# Ignore everything else in logs/
+*
