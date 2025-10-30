@@ -3,10 +3,13 @@
 [![GitHub Stars](https://img.shields.io/github/stars/danhtran2mind/BTCUSDT-ML-ETL-Pipeline?style=social&label=Repo%20Stars)](https://github.com/danhtran2mind/BTCUSDT-ML-ETL-Pipeline/stargazers)
 ![Badge](https://hitscounter.dev/api/hit?url=https%3A%2F%2Fgithub.com%2Fdanhtran2mind%2FBTCUSDT-ML-ETL-Pipeline&label=Repo+Views&icon=github&color=%236f42c1&message=&style=social&tz=UTC)
 
-[![pyspark](https://img.shields.io/badge/PySpark-blue.svg?logo=apachespark)](https://spark.apache.org/docs/latest/api/python/)
-[![airflow](https://img.shields.io/badge/Airflow-blue.svg?logo=apacheairflow)](https://airflow.apache.org/)
-[![minio](https://img.shields.io/badge/MinIO-blue.svg?logo=minio)](https://min.io/)
+![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C.svg?logo=apache-spark&logoColor=white&style=flat)
+![Apache Airflow](https://img.shields.io/badge/Apache%20Airflow-017CEE.svg?logo=apache-airflow&logoColor=white&style=flat)
+[![MinIO](https://img.shields.io/badge/MinIO-FF367F.svg?logo=minio&logoColor=white&style=flat)](https://min.io/)
+![DuckDB](https://img.shields.io/badge/DuckDB-FFF000.svg?logo=duckdb&logoColor=black&style=flat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+
 
 A modern, scalable data engineering pipeline for processing BTC-USDT trading data using Apache Airflow, MinIO, and Apache Spark.
 
