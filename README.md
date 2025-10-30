@@ -29,6 +29,7 @@ This project delivers a robust, cloud-native ETL pipeline for extracting, transf
 - **MinIO**: Object storage for managing raw and processed data.
 - **Apache Spark**: Distributed processing engine for scalable data transformations.
 - **Apache Airflow**: Orchestrates and schedules ETL workflows for reliable execution.
+- **DuckDB**: Embedded analytical database for fast, local SQL queries on large datasets (e.g., Parquet files in MinIO).
 
 ## Notebooks
 ### 1. **Analyze historical BTC/USDT trading data with visualizations, statistical insights, and preprocessing steps for machine learning.**
