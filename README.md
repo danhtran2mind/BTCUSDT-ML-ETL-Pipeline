@@ -1,4 +1,4 @@
-# BTCUSDT ML ETL Pipeline
+# ₿ BTCUSDT ML ETL Pipeline 📈
 
 [![GitHub Stars](https://img.shields.io/github/stars/danhtran2mind/BTCUSDT-ML-ETL-Pipeline?style=social&label=Repo%20Stars)](https://github.com/danhtran2mind/BTCUSDT-ML-ETL-Pipeline/stargazers)
 ![Badge](https://hitscounter.dev/api/hit?url=https%3A%2F%2Fgithub.com%2Fdanhtran2mind%2FBTCUSDT-ML-ETL-Pipeline&label=Repo+Views&icon=github&color=%236f42c1&message=&style=social&tz=UTC)
@@ -11,11 +11,11 @@
 
 
 
-A modern, scalable data engineering pipeline for processing BTC-USDT trading data using Apache Airflow, MinIO, and Apache Spark.
+A modern, scalable data engineering pipeline for processing BTC-USDT trading data using Apache Airflow, MinIO, Apache Spark, and DuckDB.
 
 ## Introduction
 
-This project delivers a robust, cloud-native ETL pipeline for extracting, transforming, and loading BTC-USDT trading data, leveraging industry-leading tools for orchestration, storage, and distributed processing.
+This project delivers a robust, cloud-native ETL pipeline 🚀 for extracting, transforming, and loading BTC-USDT trading data 📈, leveraging industry-leading tools for orchestration, storage, and distributed processing.
 
 ## Key Features
 
